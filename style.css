@@ -1,1 +1,113 @@
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  text-align:center;
+  color:#1f1f1f;
+  overflow-x:hidden;
+}
+
+/* CONTENU */
+.page{
+  position:relative;
+  z-index:3;
+  max-width:900px;
+  margin:60px auto;
+  padding:20px;
+}
+
+h1{
+  font-size:42px;
+  margin-bottom:10px;
+}
+
+h2{
+  color:#E2001A;
+  margin-bottom:30px;
+}
+
+.photo{
+  width:280px;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.2);
+  margin-bottom:30px;
+  transition: transform 0.3s ease;
+}
+
+.photo:hover{
+  transform: scale(1.05);
+}
+
+.card{
+  background:white;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 15px 35px rgba(0,0,0,0.08);
+  margin-bottom:25px;
+}
+
+button{
+  padding:14px 30px;
+  border:none;
+  border-radius:12px;
+  background:#E2001A;
+  color:white;
+  font-weight:600;
+  font-size:16px;
+  cursor:pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover{
+  background:#c40017;
+  transform: translateY(-2px);
+}
+
+.message{
+  margin-top:20px;
+  font-size:18px;
+  font-weight:600;
+  color:#00005f;
+}
+
+/* ===== Background Flags Costa Rica ===== */
+
+.bg-flags{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  opacity:0.18;
+  pointer-events:none;
+  background-size:140px 95px;
+  background-repeat:repeat;
+  background-image:
+    linear-gradient(
+      to bottom,
+      #002B7F 0%,
+      #002B7F 16.67%,
+      #FFFFFF 16.67%,
+      #FFFFFF 33.34%,
+      #CE1126 33.34%,
+      #CE1126 66.67%,
+      #FFFFFF 66.67%,
+      #FFFFFF 83.34%,
+      #002B7F 83.34%,
+      #002B7F 100%
+    );
+}
+
+/* ===== Hearts Overlay ===== */
+
+.bg-hearts{
+  position:fixed;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  opacity:0.4;
+  background-repeat:repeat;
+  background-size:200px 200px;
+  background-image:
+    radial-gradient(circle at 40px 40px, rgba(226,0,26,.25) 0 6px, transparent 7px),
+    radial-gradient(circle at 120px 80px, rgba(255,77,109,.25) 0 5px, transparent 6px),
+    radial-gradient(circle at 80px 150px, rgba(212,169,78,.2) 0 4px, transparent 5px);
+}
 
