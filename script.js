@@ -201,9 +201,9 @@ function showMissionAccepted() {
       <h2>Mission acceptée</h2>
 
       <p>
-        Le date est validé.  
-        Le pop-corn est obligatoire.  
-        La soirée peut officiellement commencer.
+        Ta Mary Jane t’attend.  
+        Le pop-corn est validé.  
+        Le 1er août, tu n’auras pas besoin de sauver le monde.
       </p>
 
       <button class="close-popup" type="button">
