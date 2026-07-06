@@ -1,18 +1,10 @@
-/* =========================
-   SPIDER-DATE — SCRIPT.JS
-   Effets propres + têtes qui tombent uniquement sur les côtés
-========================= */
-
-const card = document.querySelector(".card");
+const card = document.querySelector(".invitation-card");
 const countdownElement = document.getElementById("countdown");
 const acceptBtn = document.getElementById("acceptBtn");
 
 const eventDate = new Date(card.dataset.eventDate);
-const whatsappMessage = card.dataset.whatsappMessage;
 
-/* =========================
-   COUNTDOWN
-========================= */
+/* COUNTDOWN */
 
 function updateCountdown() {
   const now = new Date();
@@ -62,12 +54,9 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
-/* =========================
-   SIDE SPIDER HEADS
-   Elles tombent seulement à gauche et à droite
-========================= */
+/* SIDE SPIDER MASKS ONLY */
 
-function createSideSpiderHead(side) {
+function createSideMask(side) {
   const wrapper = document.createElement("div");
   wrapper.classList.add("side-spider");
 
@@ -78,8 +67,8 @@ function createSideSpiderHead(side) {
   }
 
   wrapper.style.animationDuration = `${6 + Math.random() * 3}s`;
-  wrapper.style.setProperty("--swing", `${Math.random() * 12 - 6}deg`);
-  wrapper.style.setProperty("--scale", `${0.75 + Math.random() * 0.25}`);
+  wrapper.style.setProperty("--scale", `${0.72 + Math.random() * 0.25}`);
+  wrapper.style.setProperty("--tilt", `${Math.random() * 12 - 6}deg`);
 
   wrapper.innerHTML = `
     <div class="side-thread"></div>
@@ -97,12 +86,10 @@ function createSideSpiderHead(side) {
   }, 10000);
 }
 
-setInterval(() => createSideSpiderHead("left"), 2400);
-setInterval(() => createSideSpiderHead("right"), 2800);
+setInterval(() => createSideMask("left"), 2600);
+setInterval(() => createSideMask("right"), 3100);
 
-/* =========================
-   SMALL WEB LINES ON SIDES
-========================= */
+/* SIDE WEB LINES ONLY */
 
 function createSideWebLine(side) {
   const line = document.createElement("div");
@@ -124,47 +111,41 @@ function createSideWebLine(side) {
   }, 9000);
 }
 
-setInterval(() => createSideWebLine("left"), 1100);
-setInterval(() => createSideWebLine("right"), 1300);
+setInterval(() => createSideWebLine("left"), 1200);
+setInterval(() => createSideWebLine("right"), 1500);
 
-/* =========================
-   CARD 3D EFFECT
-========================= */
+/* 3D CARD EFFECT */
 
-if (card) {
-  card.addEventListener("mousemove", (event) => {
-    const rect = card.getBoundingClientRect();
+card.addEventListener("mousemove", (event) => {
+  const rect = card.getBoundingClientRect();
 
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
 
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
 
-    const rotateX = ((y - centerY) / centerY) * -4;
-    const rotateY = ((x - centerX) / centerX) * 4;
+  const rotateX = ((y - centerY) / centerY) * -3.5;
+  const rotateY = ((x - centerX) / centerX) * 3.5;
 
-    card.style.transform = `
-      perspective(1000px)
-      rotateX(${rotateX}deg)
-      rotateY(${rotateY}deg)
-      scale(1.01)
-    `;
-  });
+  card.style.transform = `
+    perspective(1000px)
+    rotateX(${rotateX}deg)
+    rotateY(${rotateY}deg)
+    scale(1.01)
+  `;
+});
 
-  card.addEventListener("mouseleave", () => {
-    card.style.transform = `
-      perspective(1000px)
-      rotateX(0deg)
-      rotateY(0deg)
-      scale(1)
-    `;
-  });
-}
+card.addEventListener("mouseleave", () => {
+  card.style.transform = `
+    perspective(1000px)
+    rotateX(0deg)
+    rotateY(0deg)
+    scale(1)
+  `;
+});
 
-/* =========================
-   CUSTOM CURSOR
-========================= */
+/* CUSTOM CURSOR */
 
 const cursor = document.createElement("div");
 cursor.classList.add("custom-cursor");
@@ -195,25 +176,15 @@ document.addEventListener("mousemove", (event) => {
   }
 });
 
-/* =========================
-   ACCEPT BUTTON
-========================= */
+/* ACCEPT BUTTON */
 
 acceptBtn.addEventListener("click", () => {
   launchConfetti();
   showMissionAccepted();
   playClickSound();
-
-  const message = encodeURIComponent(whatsappMessage);
-
-  setTimeout(() => {
-    window.location.href = `https://wa.me/?text=${message}`;
-  }, 2300);
 });
 
-/* =========================
-   MISSION ACCEPTED POPUP
-========================= */
+/* POPUP */
 
 function showMissionAccepted() {
   const overlay = document.createElement("div");
@@ -221,9 +192,10 @@ function showMissionAccepted() {
 
   overlay.innerHTML = `
     <div class="mission-popup">
-      <div class="popup-head">
-        <div class="popup-eye popup-eye-left"></div>
-        <div class="popup-eye popup-eye-right"></div>
+
+      <div class="spider-mask popup-mask" aria-hidden="true">
+        <div class="mask-eye mask-eye-left"></div>
+        <div class="mask-eye mask-eye-right"></div>
       </div>
 
       <h2>Mission acceptée</h2>
@@ -231,28 +203,31 @@ function showMissionAccepted() {
       <p>
         Le date est validé.  
         Le pop-corn est obligatoire.  
-        La soirée peut commencer.
+        La soirée peut officiellement commencer.
       </p>
 
-      <span>Redirection vers WhatsApp...</span>
+      <button class="close-popup" type="button">
+        Fermer
+      </button>
+
     </div>
   `;
 
   document.body.appendChild(overlay);
 
-  setTimeout(() => {
+  const closeBtn = overlay.querySelector(".close-popup");
+
+  closeBtn.addEventListener("click", () => {
     overlay.remove();
-  }, 2300);
+  });
 }
 
-/* =========================
-   CONFETTI
-========================= */
+/* CONFETTI */
 
 function launchConfetti() {
   const colors = ["#ff0033", "#005eff", "#ffffff"];
 
-  for (let i = 0; i < 90; i++) {
+  for (let i = 0; i < 95; i++) {
     const confetti = document.createElement("div");
     confetti.classList.add("confetti");
 
@@ -269,9 +244,7 @@ function launchConfetti() {
   }
 }
 
-/* =========================
-   CLICK SOUND WITHOUT FILE
-========================= */
+/* CLICK SOUND */
 
 function playClickSound() {
   const AudioContext = window.AudioContext || window.webkitAudioContext;
