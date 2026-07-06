@@ -4,7 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Spider-Date Invitation</title>
+  <title>Spider-Date | Invitation officielle</title>
+
+  <meta name="description" content="Invitation personnalisée pour une soirée cinéma Spider-Date." />
+  <meta name="theme-color" content="#e60023" />
 
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
@@ -12,76 +15,122 @@
 
 <body>
 
-  <div class="page-bg"></div>
-  <div class="web-pattern"></div>
-  <div class="city"></div>
+  <div class="background-glow"></div>
+  <div class="web-grid"></div>
+  <div class="city-silhouette"></div>
 
   <main class="page">
 
-    <section
-      class="card"
+    <section 
+      class="invitation-card"
       data-event-date="2026-07-12T20:30:00"
-      data-whatsapp-message="J’accepte la mission Spider-Date ❤️"
     >
 
-      <div class="top-label">
-        Mission confidentielle
+      <div class="classified-label">
+        Invitation confidentielle
       </div>
 
-      <div class="hero-head">
-        <div class="hero-eye hero-eye-left"></div>
-        <div class="hero-eye hero-eye-right"></div>
+      <div class="main-hero">
+        <div class="main-thread"></div>
+
+        <div class="spider-mask big-mask" aria-hidden="true">
+          <div class="mask-eye mask-eye-left"></div>
+          <div class="mask-eye mask-eye-right"></div>
+        </div>
       </div>
 
-      <h1>
-        Spider-Date
-        <span>avec ta Mary Jane</span>
-      </h1>
+      <header class="hero-text">
+        <p class="mini-title">Opération cinéma</p>
 
-      <p class="intro">
-        Tu es officiellement invitée à une soirée cinéma :
-        ambiance rouge et bleu, pop-corn obligatoire, et une mission simple…
-        passer un moment inoubliable.
-      </p>
+        <h1>
+          Spider-Date
+          <span>avec ma Mary Jane</span>
+        </h1>
 
-      <div class="mission-box">
-        <p class="mission-title">Programme de la mission</p>
+        <p class="intro">
+          Tu es officiellement invitée à une soirée cinéma spéciale :
+          ambiance rouge et bleu, pop-corn obligatoire, et une mission très importante…
+          passer une soirée beaucoup trop cute.
+        </p>
+      </header>
 
-        <div class="mission-line">
-          <span>Film</span>
-          <strong>Spider-Man</strong>
+      <section class="content-grid">
+
+        <article class="message-card">
+          <p class="section-label">Message secret</p>
+
+          <h2>Une mission rien que pour toi</h2>
+
+          <p>
+            Ce soir-là, pas besoin de sauver la ville.  
+            Notre vraie mission : regarder Spider-Man, rire, manger du pop-corn
+            et profiter d’un moment ensemble.
+          </p>
+
+          <p class="soft-note">
+            Dress code conseillé : rouge, bleu, noir… ou juste ton glow naturel.
+          </p>
+        </article>
+
+        <article class="ticket-card">
+          <p class="ticket-title">Ticket de mission</p>
+
+          <div class="ticket-line">
+            <span>Film</span>
+            <strong>Spider-Man</strong>
+          </div>
+
+          <div class="ticket-line">
+            <span>Date</span>
+            <strong>Samedi 12 juillet</strong>
+          </div>
+
+          <div class="ticket-line">
+            <span>Heure</span>
+            <strong>20h30</strong>
+          </div>
+
+          <div class="ticket-line">
+            <span>Lieu</span>
+            <strong>Pathé Bellecour</strong>
+          </div>
+
+          <div id="countdown" class="countdown"></div>
+        </article>
+
+      </section>
+
+      <section class="photo-zone">
+
+        <div class="photo-frame">
+          <div class="photo-placeholder">
+            <span>Votre photo ici</span>
+          </div>
         </div>
 
-        <div class="mission-line">
-          <span>Date</span>
-          <strong>Samedi 29 juillet</strong>
+        <div class="photo-text">
+          <p class="section-label">Spider-Man & Mary Jane vibes</p>
+
+          <p>
+            Tu peux remplacer ce bloc par votre photo pour rendre la page encore plus personnalisée.
+          </p>
         </div>
 
-        <div class="mission-line">
-          <span>Heure</span>
-          <strong>20h30</strong>
-        </div>
+      </section>
 
-        <div class="mission-line">
-          <span>Lieu</span>
-          <strong>Pathé Bellecour</strong>
-        </div>
+      <section class="cta-zone">
+        <p class="question">
+          Alors, est-ce que tu acceptes cette mission ?
+        </p>
 
-        <div id="countdown" class="countdown"></div>
-      </div>
+        <button id="acceptBtn" class="accept-btn" type="button">
+          J’accepte la mission
+        </button>
 
-      <p class="note">
-        Dress code : rouge, bleu, noir, ou juste ton beau sourire.
-        Moi je m’occupe du reste.
-      </p>
-
-      <button id="acceptBtn" class="accept-btn">
-        J’accepte la mission
-      </button>
-
-      <p class="quote">
-        Je t'aime dans toutes les galaxies!
-      </p>
+        <p class="quote">
+          Je t'aime dans toute les galaxies !
+        </p>
+      </section>
 
     </section>
 
