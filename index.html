@@ -1,39 +1,91 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fernanda 🇨🇷✨</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" href="style.css">
+  <title>Spider-Date Invitation</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
 
 <body>
 
-  <!-- Background -->
-  <div class="bg-flags"></div>
-  <div class="bg-hearts"></div>
+  <div class="page-bg"></div>
+  <div class="web-pattern"></div>
+  <div class="city"></div>
 
   <main class="page">
 
-    <h1>Fernanda 🇨🇷</h1>
-    <h2>La plus incroyable 💃✨</h2>
+    <section
+      class="card"
+      data-event-date="2026-07-12T20:30:00"
+      data-whatsapp-message="J’accepte la mission Spider-Date ❤️"
+    >
 
-    <img src="photo.jpg" class="photo" alt="Fernanda">
+      <div class="top-label">
+        Mission confidentielle
+      </div>
 
-    <div class="card">
-      <p>
-        Trop drôle. Trop belle. Trop latina.  
-        Niveau énergie : <strong>PURA VIDA</strong> 🌴
+      <div class="hero-head">
+        <div class="hero-eye hero-eye-left"></div>
+        <div class="hero-eye hero-eye-right"></div>
+      </div>
+
+      <h1>
+        Spider-Date
+        <span>avec ta Mary Jane</span>
+      </h1>
+
+      <p class="intro">
+        Tu es officiellement invitée à une soirée cinéma :
+        ambiance rouge et bleu, pop-corn obligatoire, et une mission simple…
+        passer une soirée beaucoup trop cute.
       </p>
-    </div>
 
-    <button id="btnLove">Clique ici si tu es incroyable 😌</button>
+      <div class="mission-box">
+        <p class="mission-title">Programme de la mission</p>
 
-    <p id="message" class="message"></p>
+        <div class="mission-line">
+          <span>Film</span>
+          <strong>Spider-Man</strong>
+        </div>
+
+        <div class="mission-line">
+          <span>Date</span>
+          <strong>Samedi 12 juillet</strong>
+        </div>
+
+        <div class="mission-line">
+          <span>Heure</span>
+          <strong>20h30</strong>
+        </div>
+
+        <div class="mission-line">
+          <span>Lieu</span>
+          <strong>Pathé Bellecour</strong>
+        </div>
+
+        <div id="countdown" class="countdown"></div>
+      </div>
+
+      <p class="note">
+        Dress code : rouge, bleu, noir, ou juste ton beau sourire.
+        Moi je m’occupe du reste.
+      </p>
+
+      <button id="acceptBtn" class="accept-btn">
+        J’accepte la mission
+      </button>
+
+      <p class="quote">
+        Je t'aime dans toutes les galaxies!
+      </p>
+
+    </section>
 
   </main>
 
-  <script src="script.js"></script>
 </body>
 </html>
