@@ -1,924 +1,246 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+document.addEventListener("DOMContentLoaded", () => {
+  const card = document.querySelector(".invitation-card");
+  const countdownElement = document.getElementById("countdown");
+  const acceptBtn = document.getElementById("acceptBtn");
+  const noBtn = document.getElementById("noBtn");
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+  const eventDate = new Date(card.dataset.eventDate);
 
-html {
-  min-height: 100%;
-  scroll-behavior: smooth;
-}
+  /* COUNTDOWN */
 
-body {
-  min-height: 100vh;
-  overflow-x: hidden;
-  font-family: "Poppins", sans-serif;
-  background: #030615;
-  color: white;
-  cursor: none;
-}
+  function updateCountdown() {
+    const now = new Date();
+    const diff = eventDate - now;
 
-/* BACKGROUND */
+    if (diff <= 0) {
+      countdownElement.innerHTML = `
+        <div class="countdown-finished">
+          C’est l’heure de la mission.
+        </div>
+      `;
+      return;
+    }
 
-.background-glow {
-  position: fixed;
-  inset: 0;
-  z-index: -5;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.16), transparent 28%),
-    radial-gradient(circle at 15% 18%, rgba(255,0,51,0.58), transparent 28%),
-    radial-gradient(circle at 85% 20%, rgba(0,94,255,0.55), transparent 28%),
-    linear-gradient(135deg, #040615 0%, #071633 42%, #7b0016 100%);
-}
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
 
-.web-grid {
-  position: fixed;
-  inset: 0;
-  z-index: -4;
-  opacity: 0.2;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.16) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.16) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(circle at center, transparent 0%, black 55%, black 100%);
-}
+    countdownElement.innerHTML = `
+      <p class="countdown-label">Début de la mission dans</p>
 
-.city-silhouette {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: -3;
-  width: 100%;
-  height: 175px;
-  opacity: 0.95;
-  background:
-    linear-gradient(to top, #02030a 0%, #02030a 38%, transparent 100%),
-    repeating-linear-gradient(
-      90deg,
-      #02030a 0 42px,
-      transparent 42px 66px
+      <div class="countdown-grid">
+        <div><strong>${days}</strong><span>jours</span></div>
+        <div><strong>${hours}</strong><span>heures</span></div>
+        <div><strong>${minutes}</strong><span>min</span></div>
+        <div><strong>${seconds}</strong><span>sec</span></div>
+      </div>
+    `;
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  /* SIDE SPIDERS */
+
+  function createSideSpider(side) {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("side-spider");
+
+    wrapper.style.left =
+      side === "left"
+        ? `${Math.random() * 11 + 2}%`
+        : `${Math.random() * 11 + 87}%`;
+
+    wrapper.style.animationDuration = `${6 + Math.random() * 3}s`;
+    wrapper.style.setProperty("--scale", `${0.72 + Math.random() * 0.25}`);
+    wrapper.style.setProperty("--tilt", `${Math.random() * 12 - 6}deg`);
+
+    wrapper.innerHTML = `
+      <div class="side-thread"></div>
+      <div class="side-head">
+        <div class="side-eye side-eye-left"></div>
+        <div class="side-eye side-eye-right"></div>
+      </div>
+    `;
+
+    document.body.appendChild(wrapper);
+
+    setTimeout(() => {
+      wrapper.remove();
+    }, 10000);
+  }
+
+  setInterval(() => createSideSpider("left"), 2600);
+  setInterval(() => createSideSpider("right"), 3100);
+
+  /* SIDE WEB LINES */
+
+  function createSideWebLine(side) {
+    const line = document.createElement("div");
+    line.classList.add("side-web-line");
+
+    line.style.left =
+      side === "left"
+        ? `${Math.random() * 16}%`
+        : `${Math.random() * 16 + 84}%`;
+
+    line.style.height = `${120 + Math.random() * 220}px`;
+    line.style.animationDuration = `${4 + Math.random() * 4}s`;
+
+    document.body.appendChild(line);
+
+    setTimeout(() => {
+      line.remove();
+    }, 9000);
+  }
+
+  setInterval(() => createSideWebLine("left"), 1200);
+  setInterval(() => createSideWebLine("right"), 1500);
+
+  /* CARD EFFECT */
+
+  card.addEventListener("mousemove", (event) => {
+    const rect = card.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -3.5;
+    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 3.5;
+
+    card.style.transform = `
+      perspective(1000px)
+      rotateX(${rotateX}deg)
+      rotateY(${rotateY}deg)
+      scale(1.01)
+    `;
+  });
+
+  card.addEventListener("mouseleave", () => {
+    card.style.transform = `
+      perspective(1000px)
+      rotateX(0deg)
+      rotateY(0deg)
+      scale(1)
+    `;
+  });
+
+  /* ACCEPT BUTTON */
+
+  acceptBtn.addEventListener("click", () => {
+    launchConfetti();
+    showMissionAccepted();
+  });
+
+  /* NO BUTTON ESCAPE */
+
+  const noTexts = [
+    "Non",
+    "Même pas en rêve",
+    "Trop tard",
+    "Essaie encore",
+    "Impossible",
+    "Spider-sens activé",
+    "Nope"
+  ];
+
+  function moveNoButton() {
+    const padding = 24;
+    const buttonWidth = noBtn.offsetWidth;
+    const buttonHeight = noBtn.offsetHeight;
+
+    const maxX = window.innerWidth - buttonWidth - padding;
+    const maxY = window.innerHeight - buttonHeight - padding;
+
+    const randomX = Math.floor(Math.random() * (maxX - padding)) + padding;
+    const randomY = Math.floor(Math.random() * (maxY - padding)) + padding;
+
+    noBtn.style.position = "fixed";
+    noBtn.style.left = `${randomX}px`;
+    noBtn.style.top = `${randomY}px`;
+    noBtn.style.zIndex = "9999";
+
+    noBtn.textContent = noTexts[Math.floor(Math.random() * noTexts.length)];
+
+    noBtn.animate(
+      [
+        { transform: "scale(1) rotate(0deg)" },
+        { transform: "scale(1.08) rotate(-4deg)" },
+        { transform: "scale(1) rotate(2deg)" }
+      ],
+      {
+        duration: 280,
+        easing: "ease-out"
+      }
     );
-}
-
-/* PAGE */
-
-.page {
-  position: relative;
-  z-index: 5;
-  min-height: 100vh;
-  padding: 56px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.invitation-card {
-  width: min(940px, 94vw);
-  position: relative;
-  padding: 46px;
-  border-radius: 38px;
-  text-align: center;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04));
-  border: 1px solid rgba(255,255,255,0.22);
-  box-shadow:
-    0 0 70px rgba(255,0,51,0.3),
-    0 0 95px rgba(0,94,255,0.18),
-    inset 0 0 45px rgba(255,255,255,0.05);
-  backdrop-filter: blur(20px);
-  animation: cardIn 1s ease both;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-
-@keyframes cardIn {
-  from {
-    opacity: 0;
-    transform: translateY(45px) scale(0.96);
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
+  noBtn.addEventListener("mouseenter", moveNoButton);
+  noBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    moveNoButton();
+  });
+  noBtn.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    moveNoButton();
+  });
 
-.classified-label {
-  display: inline-block;
-  margin-bottom: 22px;
-  padding: 9px 22px;
-  border-radius: 999px;
-  background: white;
-  color: #e60023;
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-  box-shadow: 0 0 24px rgba(255,255,255,0.25);
-}
+  /* POPUP */
 
-/* CUSTOM SPIDER EMOJI */
+  function showMissionAccepted() {
+    const overlay = document.createElement("div");
+    overlay.classList.add("mission-overlay");
 
-.main-hero {
-  width: 130px;
-  margin: 0 auto 24px;
-  animation: heroDrop 1.2s ease both;
-}
+    overlay.innerHTML = `
+      <div class="mission-popup">
 
-.main-thread {
-  width: 3px;
-  height: 66px;
-  margin: 0 auto;
-  background: linear-gradient(to bottom, white, rgba(255,255,255,0.08));
-  box-shadow: 0 0 12px rgba(255,255,255,0.8);
-}
+        <div class="spider-mask popup-mask" aria-hidden="true">
+          <div class="mask-eye mask-eye-left"></div>
+          <div class="mask-eye mask-eye-right"></div>
+        </div>
 
-.spider-emoji {
-  position: relative;
-  margin: 0 auto;
-  border: 4px solid #050505;
-  border-radius: 48% 48% 54% 54%;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 12%, #ff7b86 0%, #ff1f3e 24%, #d40028 50%, #720013 100%);
-  box-shadow:
-    0 0 28px rgba(255,0,51,0.9),
-    0 0 48px rgba(0,94,255,0.45),
-    inset 0 0 18px rgba(255,255,255,0.12);
-}
+        <h2>Mission acceptée</h2>
 
-.spider-emoji::before,
-.spider-emoji::after {
-  content: "";
-  position: absolute;
-  top: -18%;
-  left: 50%;
-  width: 5px;
-  height: 150%;
-  background: rgba(0,0,0,0.58);
-  transform-origin: center;
-  border-radius: 999px;
-}
+        <p>
+          Ta Mary Jane t’attend.<br>
+          Le pop-corn est validé.<br>
+          Le 1er août, tu n’auras pas besoin de sauver le monde.
+        </p>
 
-.spider-emoji::before {
-  transform: rotate(34deg);
-}
+        <button class="close-popup" type="button">
+          Fermer
+        </button>
 
-.spider-emoji::after {
-  transform: rotate(-34deg);
-}
+      </div>
+    `;
 
-.spider-emoji-big {
-  width: 100px;
-  height: 108px;
-  animation: heroFloat 2.8s ease-in-out infinite;
-}
+    document.body.appendChild(overlay);
 
-.spider-eye {
-  position: absolute;
-  z-index: 5;
-  background:
-    radial-gradient(circle at 70% 30%, #ffffff 0%, #f7f9ff 45%, #dbe8ff 100%);
-  border: 4px solid #050505;
-  box-shadow:
-    inset -4px -4px 0 rgba(0,0,0,0.08),
-    0 0 10px rgba(255,255,255,0.35);
-  clip-path: polygon(
-    5% 50%,
-    19% 23%,
-    53% 4%,
-    94% 17%,
-    80% 63%,
-    48% 95%,
-    17% 82%
-  );
-}
-
-.spider-emoji-big .spider-eye {
-  top: 38px;
-  width: 39px;
-  height: 29px;
-}
-
-.spider-eye-left {
-  left: 9px;
-  transform: rotate(-10deg);
-}
-
-.spider-eye-right {
-  right: 9px;
-  transform: scaleX(-1) rotate(-10deg);
-}
-
-@keyframes heroDrop {
-  from {
-    opacity: 0;
-    transform: translateY(-80px);
+    overlay.querySelector(".close-popup").addEventListener("click", () => {
+      overlay.remove();
+    });
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  /* CONFETTI */
+
+  function launchConfetti() {
+    const colors = ["#ff0033", "#005eff", "#ffffff"];
+
+    for (let i = 0; i < 95; i++) {
+      const confetti = document.createElement("div");
+      confetti.classList.add("confetti");
+
+      confetti.style.left = `${Math.random() * 100}%`;
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDuration = `${2 + Math.random() * 1.7}s`;
+      confetti.style.animationDelay = `${Math.random() * 0.4}s`;
+
+      document.body.appendChild(confetti);
+
+      setTimeout(() => {
+        confetti.remove();
+      }, 4200);
+    }
   }
-}
-
-@keyframes heroFloat {
-  0%, 100% {
-    transform: translateY(0) rotate(-2deg);
-  }
-
-  50% {
-    transform: translateY(-8px) rotate(2deg);
-  }
-}
-
-/* TEXT */
-
-.mini-title,
-.section-label {
-  color: #9fc2ff;
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-h1 {
-  margin: 12px 0 22px;
-  font-family: "Bebas Neue", sans-serif;
-  font-size: clamp(58px, 10vw, 120px);
-  line-height: 0.88;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  text-shadow:
-    0 0 16px rgba(255,0,51,0.8),
-    0 0 34px rgba(0,94,255,0.55);
-}
-
-h1 span {
-  display: block;
-  background: linear-gradient(90deg, #ff0033, #ffffff, #2e77ff);
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-.intro {
-  width: min(680px, 100%);
-  margin: 0 auto 36px;
-  color: rgba(255,255,255,0.9);
-  font-size: 18px;
-  line-height: 1.8;
-}
-
-/* CONTENT */
-
-.content-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 26px;
-  align-items: stretch;
-  margin-top: 22px;
-}
-
-.message-card,
-.ticket-card,
-.vibe-card {
-  border-radius: 30px;
-}
-
-.message-card {
-  padding: 30px;
-  text-align: left;
-  background: rgba(0,0,0,0.32);
-  border: 1px solid rgba(255,255,255,0.16);
-  box-shadow: inset 0 0 30px rgba(255,255,255,0.04);
-}
-
-.message-card h2 {
-  margin: 12px 0 16px;
-  font-size: 28px;
-  line-height: 1.2;
-}
-
-.message-card p {
-  color: rgba(255,255,255,0.86);
-  line-height: 1.8;
-}
-
-.soft-note {
-  margin-top: 18px;
-  color: white !important;
-  font-weight: 700;
-}
-
-/* TICKET */
-
-.ticket-card {
-  position: relative;
-  padding: 30px;
-  color: #111;
-  background: white;
-  box-shadow:
-    10px 10px 0 #e60023,
-    18px 18px 0 rgba(0,94,255,0.65),
-    0 0 40px rgba(255,255,255,0.2);
-  transform: rotate(-1.2deg);
-}
-
-.ticket-card::before,
-.ticket-card::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: #071633;
-  transform: translateY(-50%);
-}
-
-.ticket-card::before {
-  left: -12px;
-}
-
-.ticket-card::after {
-  right: -12px;
-}
-
-.ticket-title {
-  margin-bottom: 18px;
-  color: #e60023;
-  font-family: "Bebas Neue", sans-serif;
-  font-size: 40px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.ticket-line {
-  display: flex;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 13px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.12);
-  text-align: left;
-  font-size: 16px;
-}
-
-.ticket-line span {
-  color: rgba(0,0,0,0.55);
-  font-weight: 800;
-}
-
-.ticket-line strong {
-  color: #111;
-  text-align: right;
-}
-
-/* COUNTDOWN */
-
-.countdown {
-  margin-top: 24px;
-}
-
-.countdown-label {
-  margin-bottom: 12px;
-  color: #e60023;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.countdown-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-
-.countdown-grid div {
-  padding: 12px 8px;
-  border-radius: 16px;
-  background: #111;
-  color: white;
-  box-shadow: inset 0 0 14px rgba(255,255,255,0.12);
-}
-
-.countdown-grid strong {
-  display: block;
-  font-size: 24px;
-}
-
-.countdown-grid span {
-  font-size: 11px;
-  opacity: 0.75;
-  text-transform: uppercase;
-}
-
-.countdown-finished {
-  padding: 15px;
-  border-radius: 16px;
-  background: #111;
-  color: white;
-  font-weight: 900;
-}
-
-/* VIBE ZONE */
-
-.vibe-zone {
-  margin: 42px auto 0;
-}
-
-.vibe-card {
-  padding: 30px;
-  text-align: left;
-  background:
-    linear-gradient(135deg, rgba(255,0,51,0.22), rgba(0,94,255,0.18));
-  border: 1px solid rgba(255,255,255,0.18);
-  box-shadow:
-    inset 0 0 35px rgba(255,255,255,0.05),
-    0 0 35px rgba(255,0,51,0.18);
-}
-
-.vibe-card h2 {
-  margin: 12px 0 14px;
-  font-size: 28px;
-  line-height: 1.2;
-}
-
-.vibe-card p {
-  color: rgba(255,255,255,0.88);
-  line-height: 1.8;
-}
-
-.vibe-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 22px;
-}
-
-.vibe-tags span {
-  padding: 9px 14px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.13);
-  border: 1px solid rgba(255,255,255,0.18);
-  color: white;
-  font-size: 13px;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-/* CTA */
-
-.cta-zone {
-  margin-top: 38px;
-}
-
-.question {
-  margin-bottom: 20px;
-  font-size: 19px;
-  font-weight: 700;
-}
-
-.buttons-zone {
-  position: relative;
-  min-height: 76px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
-}
-
-.accept-btn,
-.no-btn {
-  padding: 17px 38px;
-  border-radius: 999px;
-  font-family: "Poppins", sans-serif;
-  font-size: 17px;
-  font-weight: 900;
-  cursor: pointer;
-  transition: transform 0.24s ease, box-shadow 0.24s ease, background 0.24s ease;
-}
-
-.accept-btn {
-  border: none;
-  color: white;
-  background: linear-gradient(90deg, #ff0033, #005eff);
-  box-shadow:
-    0 0 28px rgba(255,0,51,0.5),
-    0 0 38px rgba(0,94,255,0.35);
-}
-
-.accept-btn:hover {
-  transform: translateY(-5px) scale(1.04);
-  box-shadow:
-    0 0 45px rgba(255,0,51,0.85),
-    0 0 55px rgba(0,94,255,0.6);
-}
-
-.no-btn {
-  border: 2px solid rgba(255,255,255,0.55);
-  color: white;
-  background: rgba(255,255,255,0.12);
-  box-shadow:
-    0 0 18px rgba(255,255,255,0.18),
-    inset 0 0 20px rgba(255,255,255,0.06);
-  backdrop-filter: blur(10px);
-}
-
-.no-btn:hover {
-  background: rgba(255,0,51,0.22);
-}
-
-.quote {
-  margin-top: 26px;
-  font-size: 13px;
-  opacity: 0.68;
-}
-
-/* SIDE FALLING SPIDER EMOJIS */
-
-.side-spider {
-  position: fixed;
-  top: -190px;
-  z-index: 3;
-  pointer-events: none;
-  animation: sideDrop linear forwards;
-}
-
-.side-thread {
-  width: 2px;
-  height: 105px;
-  margin: 0 auto;
-  background: linear-gradient(to bottom, white, rgba(255,255,255,0.08));
-  box-shadow: 0 0 8px rgba(255,255,255,0.75);
-}
-
-.side-head {
-  position: relative;
-  width: 62px;
-  height: 68px;
-  border: 3px solid #080808;
-  border-radius: 48% 48% 54% 54%;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 14%, #ff6f7b 0%, #ff1f3e 25%, #d40028 52%, #760014 100%);
-  box-shadow:
-    0 0 18px rgba(255,0,51,0.7),
-    0 0 28px rgba(0,94,255,0.35);
-  animation: sideSwing 2.4s ease-in-out infinite;
-}
-
-.side-head::before,
-.side-head::after {
-  content: "";
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  width: 3px;
-  height: 98px;
-  background: rgba(0,0,0,0.55);
-  transform-origin: center;
-  border-radius: 999px;
-}
-
-.side-head::before {
-  transform: rotate(34deg);
-}
-
-.side-head::after {
-  transform: rotate(-34deg);
-}
-
-.side-eye {
-  position: absolute;
-  top: 24px;
-  z-index: 5;
-  width: 24px;
-  height: 18px;
-  background:
-    radial-gradient(circle at 70% 30%, #ffffff 0%, #f7f9ff 45%, #dbe8ff 100%);
-  border: 3px solid #050505;
-  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.08);
-  clip-path: polygon(
-    5% 50%,
-    19% 23%,
-    53% 4%,
-    94% 17%,
-    80% 63%,
-    48% 95%,
-    17% 82%
-  );
-}
-
-.side-eye-left {
-  left: 6px;
-  transform: rotate(-10deg);
-}
-
-.side-eye-right {
-  right: 6px;
-  transform: scaleX(-1) rotate(-10deg);
-}
-
-@keyframes sideDrop {
-  0% {
-    opacity: 0;
-    transform: translateY(0) scale(var(--scale));
-  }
-
-  12% {
-    opacity: 1;
-  }
-
-  85% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(120vh) scale(var(--scale));
-  }
-}
-
-@keyframes sideSwing {
-  0%, 100% {
-    transform: rotate(calc(var(--tilt) - 5deg));
-  }
-
-  50% {
-    transform: rotate(calc(var(--tilt) + 5deg));
-  }
-}
-
-/* SIDE WEB LINES */
-
-.side-web-line {
-  position: fixed;
-  top: -260px;
-  z-index: 2;
-  width: 2px;
-  background: linear-gradient(to bottom, white, transparent);
-  opacity: 0.32;
-  pointer-events: none;
-  animation: sideWebDrop linear forwards;
-}
-
-@keyframes sideWebDrop {
-  from {
-    opacity: 0.42;
-    transform: translateY(0);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateY(120vh);
-  }
-}
-
-/* CURSOR */
-
-.custom-cursor {
-  position: fixed;
-  z-index: 9999;
-  width: 22px;
-  height: 22px;
-  border: 2px solid white;
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  box-shadow:
-    0 0 12px #ff0033,
-    0 0 22px #005eff;
-}
-
-.cursor-trail {
-  position: fixed;
-  z-index: 9998;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  pointer-events: none;
-  background: white;
-  box-shadow: 0 0 10px white;
-  animation: trailFade 0.65s ease forwards;
-}
-
-@keyframes trailFade {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  to {
-    opacity: 0;
-    transform: scale(0);
-  }
-}
-
-/* POPUP */
-
-.mission-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background:
-    radial-gradient(circle at center, rgba(255,0,51,0.35), rgba(0,0,0,0.94));
-  backdrop-filter: blur(14px);
-  animation: overlayIn 0.3s ease both;
-}
-
-.mission-popup {
-  width: min(430px, 100%);
-  padding: 38px 28px;
-  text-align: center;
-  border-radius: 30px;
-  border: 4px solid #e60023;
-  background: white;
-  color: #111;
-  box-shadow:
-    12px 12px 0 #005eff,
-    0 0 60px rgba(255,255,255,0.4);
-  animation: popupIn 0.5s ease both;
-}
-
-.popup-emoji {
-  width: 78px;
-  height: 84px;
-  margin-bottom: 18px;
-}
-
-.popup-emoji .spider-eye {
-  top: 30px;
-  width: 29px;
-  height: 21px;
-  border-width: 3px;
-}
-
-.popup-emoji .spider-eye-left {
-  left: 8px;
-}
-
-.popup-emoji .spider-eye-right {
-  right: 8px;
-}
-
-.mission-popup h2 {
-  margin-bottom: 12px;
-  color: #e60023;
-  font-family: "Bebas Neue", sans-serif;
-  font-size: 44px;
-  letter-spacing: 1px;
-}
-
-.mission-popup p {
-  line-height: 1.7;
-}
-
-.close-popup {
-  margin-top: 22px;
-  padding: 12px 28px;
-  border: none;
-  border-radius: 999px;
-  color: white;
-  font-family: "Poppins", sans-serif;
-  font-weight: 900;
-  cursor: pointer;
-  background: linear-gradient(90deg, #ff0033, #005eff);
-  box-shadow:
-    0 0 20px rgba(255,0,51,0.4),
-    0 0 25px rgba(0,94,255,0.35);
-  transition: transform 0.2s ease;
-}
-
-.close-popup:hover {
-  transform: scale(1.04);
-}
-
-@keyframes overlayIn {
-  from { 
-    opacity: 0; 
-  }
-
-  to { 
-    opacity: 1; 
-  }
-}
-
-@keyframes popupIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px) scale(0.85) rotate(-2deg);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1) rotate(0);
-  }
-}
-
-/* CONFETTI */
-
-.confetti {
-  position: fixed;
-  top: -20px;
-  z-index: 999999;
-  width: 10px;
-  height: 18px;
-  border-radius: 3px;
-  pointer-events: none;
-  animation: confettiFall linear forwards;
-}
-
-@keyframes confettiFall {
-  to {
-    opacity: 0;
-    transform: translateY(120vh) rotate(720deg);
-  }
-}
-
-/* RESPONSIVE */
-
-@media (max-width: 800px) {
-  body {
-    cursor: auto;
-  }
-
-  .page {
-    padding: 36px 14px;
-  }
-
-  .invitation-card {
-    padding: 32px 20px;
-    border-radius: 30px;
-  }
-
-  .content-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .ticket-card {
-    transform: rotate(0);
-    box-shadow:
-      6px 6px 0 #e60023,
-      11px 11px 0 rgba(0,94,255,0.65);
-  }
-
-  .vibe-card {
-    text-align: center;
-  }
-
-  .vibe-tags {
-    justify-content: center;
-  }
-
-  h1 {
-    font-size: 62px;
-  }
-
-  .intro {
-    font-size: 15.5px;
-  }
-
-  .countdown-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .custom-cursor,
-  .cursor-trail {
-    display: none;
-  }
-
-  .side-head {
-    width: 50px;
-    height: 56px;
-  }
-
-  .side-thread {
-    height: 78px;
-  }
-
-  .side-eye {
-    top: 20px;
-    width: 19px;
-    height: 14px;
-    border-width: 2px;
-  }
-
-  .side-eye-left {
-    left: 6px;
-  }
-
-  .side-eye-right {
-    right: 6px;
-  }
-
-  .buttons-zone {
-    min-height: 90px;
-  }
-}
+});
