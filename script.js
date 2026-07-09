@@ -177,12 +177,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   noBtn.addEventListener("mouseenter", moveNoButton);
-
   noBtn.addEventListener("click", (event) => {
     event.preventDefault();
     moveNoButton();
   });
-
   noBtn.addEventListener("touchstart", (event) => {
     event.preventDefault();
     moveNoButton();
