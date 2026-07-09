@@ -244,3 +244,65 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const noBtn = document.getElementById("noBtn");
+
+  if (!noBtn) return;
+
+  const noTexts = [
+    "Non",
+    "Même pas en rêve",
+    "Trop tard",
+    "Essaie encore",
+    "Impossible",
+    "Lâche l'affaire fer",
+    "Nope",
+    "Tu rêves",
+    "Jamais",
+    "Raté encore"
+  ];
+
+  function moveNoButton() {
+    const padding = 24;
+
+    const buttonWidth = noBtn.offsetWidth;
+    const buttonHeight = noBtn.offsetHeight;
+
+    const maxX = window.innerWidth - buttonWidth - padding;
+    const maxY = window.innerHeight - buttonHeight - padding;
+
+    const randomX = Math.floor(Math.random() * (maxX - padding)) + padding;
+    const randomY = Math.floor(Math.random() * (maxY - padding)) + padding;
+
+    noBtn.style.position = "fixed";
+    noBtn.style.left = `${randomX}px`;
+    noBtn.style.top = `${randomY}px`;
+    noBtn.style.zIndex = "999999";
+
+    noBtn.textContent = noTexts[Math.floor(Math.random() * noTexts.length)];
+
+    noBtn.animate(
+      [
+        { transform: "scale(1) rotate(0deg)" },
+        { transform: "scale(1.1) rotate(-5deg)" },
+        { transform: "scale(1) rotate(3deg)" }
+      ],
+      {
+        duration: 260,
+        easing: "ease-out"
+      }
+    );
+  }
+
+  noBtn.addEventListener("mouseenter", moveNoButton);
+
+  noBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    moveNoButton();
+  });
+
+  noBtn.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    moveNoButton();
+  });
+});
