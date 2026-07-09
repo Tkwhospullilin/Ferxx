@@ -773,3 +773,34 @@ h1 span {
     min-height: 95px;
   }
 }
+.buttons-zone {
+  position: relative;
+  min-height: 85px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.no-btn {
+  padding: 17px 34px;
+  border: 2px solid rgba(255,255,255,0.55);
+  border-radius: 999px;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+  background: rgba(255,255,255,0.12);
+  box-shadow:
+    0 0 18px rgba(255,255,255,0.18),
+    inset 0 0 20px rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+  transition: transform 0.22s ease, background 0.22s ease;
+}
+
+.no-btn:hover {
+  background: rgba(255,0,51,0.22);
+  transform: scale(1.06) rotate(-3deg);
+}
