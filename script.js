@@ -1,270 +1,248 @@
-const card = document.querySelector(".invitation-card");
-const countdownElement = document.getElementById("countdown");
-const acceptBtn = document.getElementById("acceptBtn");
+document.addEventListener("DOMContentLoaded", () => {
+  const card = document.querySelector(".invitation-card");
+  const countdownElement = document.getElementById("countdown");
+  const acceptBtn = document.getElementById("acceptBtn");
+  const noBtn = document.getElementById("noBtn");
 
-const eventDate = new Date(card.dataset.eventDate);
+  const eventDate = new Date(card.dataset.eventDate);
 
-/* COUNTDOWN */
+  /* COUNTDOWN */
 
-function updateCountdown() {
-  const now = new Date();
-  const diff = eventDate - now;
+  function updateCountdown() {
+    const now = new Date();
+    const diff = eventDate - now;
 
-  if (diff <= 0) {
+    if (diff <= 0) {
+      countdownElement.innerHTML = `
+        <div class="countdown-finished">
+          C’est l’heure de la mission.
+        </div>
+      `;
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
     countdownElement.innerHTML = `
-      <div class="countdown-finished">
-        C’est l’heure de la mission.
+      <p class="countdown-label">Début de la mission dans</p>
+
+      <div class="countdown-grid">
+        <div><strong>${days}</strong><span>jours</span></div>
+        <div><strong>${hours}</strong><span>heures</span></div>
+        <div><strong>${minutes}</strong><span>min</span></div>
+        <div><strong>${seconds}</strong><span>sec</span></div>
       </div>
     `;
-    return;
   }
 
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
 
-  countdownElement.innerHTML = `
-    <p class="countdown-label">Début de la mission dans</p>
+  /* SIDE SPIDERS */
 
-    <div class="countdown-grid">
-      <div>
-        <strong>${days}</strong>
-        <span>jours</span>
+  function createSideSpider(side) {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("side-spider");
+
+    wrapper.style.left =
+      side === "left"
+        ? `${Math.random() * 11 + 2}%`
+        : `${Math.random() * 11 + 87}%`;
+
+    wrapper.style.animationDuration = `${6 + Math.random() * 3}s`;
+    wrapper.style.setProperty("--scale", `${0.72 + Math.random() * 0.25}`);
+    wrapper.style.setProperty("--tilt", `${Math.random() * 12 - 6}deg`);
+
+    wrapper.innerHTML = `
+      <div class="side-thread"></div>
+      <div class="side-head">
+        <div class="side-eye side-eye-left"></div>
+        <div class="side-eye side-eye-right"></div>
       </div>
+    `;
 
-      <div>
-        <strong>${hours}</strong>
-        <span>heures</span>
-      </div>
-
-      <div>
-        <strong>${minutes}</strong>
-        <span>min</span>
-      </div>
-
-      <div>
-        <strong>${seconds}</strong>
-        <span>sec</span>
-      </div>
-    </div>
-  `;
-}
-
-updateCountdown();
-setInterval(updateCountdown, 1000);
-
-/* SIDE SPIDER MASKS ONLY */
-
-function createSideMask(side) {
-  const wrapper = document.createElement("div");
-  wrapper.classList.add("side-spider");
-
-  if (side === "left") {
-    wrapper.style.left = `${Math.random() * 12 + 2}%`;
-  } else {
-    wrapper.style.left = `${Math.random() * 12 + 86}%`;
-  }
-
-  wrapper.style.animationDuration = `${6 + Math.random() * 3}s`;
-  wrapper.style.setProperty("--scale", `${0.72 + Math.random() * 0.25}`);
-  wrapper.style.setProperty("--tilt", `${Math.random() * 12 - 6}deg`);
-
-  wrapper.innerHTML = `
-    <div class="side-thread"></div>
-
-    <div class="side-head">
-      <div class="side-eye side-eye-left"></div>
-      <div class="side-eye side-eye-right"></div>
-    </div>
-  `;
-
-  document.body.appendChild(wrapper);
-
-  setTimeout(() => {
-    wrapper.remove();
-  }, 10000);
-}
-
-setInterval(() => createSideMask("left"), 2600);
-setInterval(() => createSideMask("right"), 3100);
-
-/* SIDE WEB LINES ONLY */
-
-function createSideWebLine(side) {
-  const line = document.createElement("div");
-  line.classList.add("side-web-line");
-
-  if (side === "left") {
-    line.style.left = `${Math.random() * 16}%`;
-  } else {
-    line.style.left = `${Math.random() * 16 + 84}%`;
-  }
-
-  line.style.height = `${120 + Math.random() * 220}px`;
-  line.style.animationDuration = `${4 + Math.random() * 4}s`;
-
-  document.body.appendChild(line);
-
-  setTimeout(() => {
-    line.remove();
-  }, 9000);
-}
-
-setInterval(() => createSideWebLine("left"), 1200);
-setInterval(() => createSideWebLine("right"), 1500);
-
-/* 3D CARD EFFECT */
-
-card.addEventListener("mousemove", (event) => {
-  const rect = card.getBoundingClientRect();
-
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
-
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
-
-  const rotateX = ((y - centerY) / centerY) * -3.5;
-  const rotateY = ((x - centerX) / centerX) * 3.5;
-
-  card.style.transform = `
-    perspective(1000px)
-    rotateX(${rotateX}deg)
-    rotateY(${rotateY}deg)
-    scale(1.01)
-  `;
-});
-
-card.addEventListener("mouseleave", () => {
-  card.style.transform = `
-    perspective(1000px)
-    rotateX(0deg)
-    rotateY(0deg)
-    scale(1)
-  `;
-});
-
-/* CUSTOM CURSOR */
-
-const cursor = document.createElement("div");
-cursor.classList.add("custom-cursor");
-document.body.appendChild(cursor);
-
-let lastTrail = 0;
-
-document.addEventListener("mousemove", (event) => {
-  cursor.style.left = `${event.clientX}px`;
-  cursor.style.top = `${event.clientY}px`;
-
-  const now = Date.now();
-
-  if (now - lastTrail > 40) {
-    lastTrail = now;
-
-    const dot = document.createElement("div");
-    dot.classList.add("cursor-trail");
-
-    dot.style.left = `${event.clientX}px`;
-    dot.style.top = `${event.clientY}px`;
-
-    document.body.appendChild(dot);
+    document.body.appendChild(wrapper);
 
     setTimeout(() => {
-      dot.remove();
-    }, 650);
+      wrapper.remove();
+    }, 10000);
   }
-});
 
-/* ACCEPT BUTTON */
+  setInterval(() => createSideSpider("left"), 2600);
+  setInterval(() => createSideSpider("right"), 3100);
 
-acceptBtn.addEventListener("click", () => {
-  launchConfetti();
-  showMissionAccepted();
-  playClickSound();
-});
+  /* SIDE WEB LINES */
 
-/* POPUP */
+  function createSideWebLine(side) {
+    const line = document.createElement("div");
+    line.classList.add("side-web-line");
 
-function showMissionAccepted() {
-  const overlay = document.createElement("div");
-  overlay.classList.add("mission-overlay");
+    line.style.left =
+      side === "left"
+        ? `${Math.random() * 16}%`
+        : `${Math.random() * 16 + 84}%`;
 
-  overlay.innerHTML = `
-    <div class="mission-popup">
+    line.style.height = `${120 + Math.random() * 220}px`;
+    line.style.animationDuration = `${4 + Math.random() * 4}s`;
 
-      <div class="spider-mask popup-mask" aria-hidden="true">
-        <div class="mask-eye mask-eye-left"></div>
-        <div class="mask-eye mask-eye-right"></div>
-      </div>
+    document.body.appendChild(line);
 
-      <h2>Mission acceptée</h2>
+    setTimeout(() => {
+      line.remove();
+    }, 9000);
+  }
 
-      <p>
-        Ta Mary Jane t’attend.  
-        Le pop-corn est validé.  
-        Le 1er août, tu n’auras pas besoin de sauver le monde.
-      </p>
+  setInterval(() => createSideWebLine("left"), 1200);
+  setInterval(() => createSideWebLine("right"), 1500);
 
-      <button class="close-popup" type="button">
-        Fermer
-      </button>
+  /* CARD EFFECT */
 
-    </div>
-  `;
+  card.addEventListener("mousemove", (event) => {
+    const rect = card.getBoundingClientRect();
 
-  document.body.appendChild(overlay);
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
 
-  const closeBtn = overlay.querySelector(".close-popup");
+    const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -3.5;
+    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 3.5;
 
-  closeBtn.addEventListener("click", () => {
-    overlay.remove();
+    card.style.transform = `
+      perspective(1000px)
+      rotateX(${rotateX}deg)
+      rotateY(${rotateY}deg)
+      scale(1.01)
+    `;
   });
-}
 
-/* CONFETTI */
+  card.addEventListener("mouseleave", () => {
+    card.style.transform = `
+      perspective(1000px)
+      rotateX(0deg)
+      rotateY(0deg)
+      scale(1)
+    `;
+  });
 
-function launchConfetti() {
-  const colors = ["#ff0033", "#005eff", "#ffffff"];
+  /* ACCEPT BUTTON */
 
-  for (let i = 0; i < 95; i++) {
-    const confetti = document.createElement("div");
-    confetti.classList.add("confetti");
+  acceptBtn.addEventListener("click", () => {
+    launchConfetti();
+    showMissionAccepted();
+  });
 
-    confetti.style.left = `${Math.random() * 100}%`;
-    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    confetti.style.animationDuration = `${2 + Math.random() * 1.7}s`;
-    confetti.style.animationDelay = `${Math.random() * 0.4}s`;
+  /* NO BUTTON ESCAPE */
 
-    document.body.appendChild(confetti);
+  const noTexts = [
+    "Non",
+    "Même pas en rêve",
+    "Trop tard",
+    "Essaie encore",
+    "Impossible",
+    "Spider-sens activé",
+    "Nope"
+  ];
 
-    setTimeout(() => {
-      confetti.remove();
-    }, 4200);
+  function moveNoButton() {
+    const padding = 24;
+    const buttonWidth = noBtn.offsetWidth;
+    const buttonHeight = noBtn.offsetHeight;
+
+    const maxX = window.innerWidth - buttonWidth - padding;
+    const maxY = window.innerHeight - buttonHeight - padding;
+
+    const randomX = Math.floor(Math.random() * (maxX - padding)) + padding;
+    const randomY = Math.floor(Math.random() * (maxY - padding)) + padding;
+
+    noBtn.style.position = "fixed";
+    noBtn.style.left = `${randomX}px`;
+    noBtn.style.top = `${randomY}px`;
+    noBtn.style.zIndex = "9999";
+
+    noBtn.textContent = noTexts[Math.floor(Math.random() * noTexts.length)];
+
+    noBtn.animate(
+      [
+        { transform: "scale(1) rotate(0deg)" },
+        { transform: "scale(1.08) rotate(-4deg)" },
+        { transform: "scale(1) rotate(2deg)" }
+      ],
+      {
+        duration: 280,
+        easing: "ease-out"
+      }
+    );
   }
-}
 
-/* CLICK SOUND */
+  noBtn.addEventListener("mouseenter", moveNoButton);
 
-function playClickSound() {
-  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  noBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    moveNoButton();
+  });
 
-  if (!AudioContext) return;
+  noBtn.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    moveNoButton();
+  });
 
-  const context = new AudioContext();
-  const oscillator = context.createOscillator();
-  const gain = context.createGain();
+  /* POPUP */
 
-  oscillator.type = "triangle";
-  oscillator.frequency.setValueAtTime(620, context.currentTime);
-  oscillator.frequency.exponentialRampToValueAtTime(140, context.currentTime + 0.12);
+  function showMissionAccepted() {
+    const overlay = document.createElement("div");
+    overlay.classList.add("mission-overlay");
 
-  gain.gain.setValueAtTime(0.1, context.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.12);
+    overlay.innerHTML = `
+      <div class="mission-popup">
 
-  oscillator.connect(gain);
-  gain.connect(context.destination);
+        <div class="spider-mask popup-mask" aria-hidden="true">
+          <div class="mask-eye mask-eye-left"></div>
+          <div class="mask-eye mask-eye-right"></div>
+        </div>
 
-  oscillator.start();
-  oscillator.stop(context.currentTime + 0.12);
-}
+        <h2>Mission acceptée</h2>
+
+        <p>
+          Ta Mary Jane t’attend.<br>
+          Le pop-corn est validé.<br>
+          Le 1er août, tu n’auras pas besoin de sauver le monde.
+        </p>
+
+        <button class="close-popup" type="button">
+          Fermer
+        </button>
+
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector(".close-popup").addEventListener("click", () => {
+      overlay.remove();
+    });
+  }
+
+  /* CONFETTI */
+
+  function launchConfetti() {
+    const colors = ["#ff0033", "#005eff", "#ffffff"];
+
+    for (let i = 0; i < 95; i++) {
+      const confetti = document.createElement("div");
+      confetti.classList.add("confetti");
+
+      confetti.style.left = `${Math.random() * 100}%`;
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDuration = `${2 + Math.random() * 1.7}s`;
+      confetti.style.animationDelay = `${Math.random() * 0.4}s`;
+
+      document.body.appendChild(confetti);
+
+      setTimeout(() => {
+        confetti.remove();
+      }, 4200);
+    }
+  }
+});
